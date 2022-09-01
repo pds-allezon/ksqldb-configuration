@@ -1,0 +1,25 @@
+---
+version: '2'
+
+services:
+  ksqldb-server:
+    image: confluentinc/ksqldb-server:0.27.2
+    network_mode: "host"
+    hostname: ksqldb-server
+    container_name: ksqldb-server
+    environment:
+      KSQL_LISTENERS: http://0.0.0.0:8088
+      KSQL_BOOTSTRAP_SERVERS: st133vm109.rtb-lab.pl:9092
+      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: "true"
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: "false"
+
+  ksqldb-cli:
+    image: confluentinc/ksqldb-cli:0.27.2
+    network_mode: "host"
+    container_name: ksqldb-cli
+    volumes:
+      - .:/query
+    depends_on:
+      - ksqldb-server
+    entrypoint: /bin/sh
+    tty: true
